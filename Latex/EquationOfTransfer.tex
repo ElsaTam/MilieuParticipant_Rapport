@@ -1,0 +1,37 @@
+\chapter{Équation de transfert}
+
+Avec toutes ces interactions causées par le passage de la lumière dans un milieu participant, nous pouvons écrire l'\textbf{équation de transfert}. Cette équation va nous permettre de décrire le comportement et la distribution de la lumière dans le milieu. L'équation du transport de la lumière (LTE) est assez proche de ce que nous allons écrire, puisqu'il s'agit en fait d'une équation de transfert mais sans milieu participant.\newline\par
+
+La différence entre la radiance incidente à un point $p$ selon la direction $\omega$  et la radiance sortante de ce point $p$ est tout simplement calculable grâce à l'extinction et la source causées par le milieu :
+\large \begin{equation}
+    \Delta L(p, \omega) = [-\sigma_{t}(p, \omega)L_{i}(p, \omega) + L_s(p, \omega)]dt
+.\end{equation} \normalsize
+\par
+
+Rappelons que nous avons donc dans cette équation l'ensemble des quatre interactions :
+\large \begin{multline}
+    \frac{\Delta L(p, \omega)}{dt} =
+        \underbrace{-
+            \underbrace{\sigma_{a}(p, \omega)L_{i}(p, \omega)}_{absorption}-
+            \underbrace{\sigma_{s}(p, \omega)L_{i}(p, \omega)}_{out-scattering}}
+        _{extinction}
+        \\ +
+        \underbrace{
+            \underbrace{L_{ve}(p, \omega)}_{emission}+
+            \underbrace{\sigma_{s}(p, \omega) \int_{\Omega4\pi}\rho(p, -\omega'\longrightarrow\omega)L_i(p, \omega')d\omega'}_{in-scattering}}
+        _{source}
+.\end{multline}
+\normalsize\newline\par
+
+De là, il y a plusieurs moyens d'utiliser cette équation. Supposons qu'aucune surface ne vienne bloquer le rayon et que celui-ci soit donc de longueur infinie. Alors la radiance incidente à un point $p$ dans une direction $\omega$ est augmentée par la radiance $S$ ajoutée à chaque point $p'$ le long du rayon. Cette quantité de radiance ajoutée est réduite par la transmittance $T_{r}$. Nous aurons donc :
+\large \begin{equation*}
+L_{i}(p, \omega) = \int_{0}^{\infty} T_{r}(p'\longrightarrow p)L_s(p', -\omega) dt.
+\end{equation*} \normalsize \newline\par
+
+Supposons maintenant qu'il y ait présence de surfaces. Alors d'une part ces surfaces vont interagir avec les radiances du milieu par réflection et/ou émission et donc ajouter une contribution dans l'équation finale. Et d'autre part, elles peuvent empêcher complètement un rayon de continuer son chemin et donc enlever la contribution directe de ce rayon de l'autre côté de la surface.\par
+Soit un rayon d'origine $p$ et de direction $\omega$ qui intercepte une surface au point $p_{0}$ (on a $p_{0} = p + t\omega$ où $t$ est la distance entre les deux points). Alors l'équation de transfert est la suivante :
+\large \begin{equation} \label{eq:equation_of_transfert}
+L_{i}(p, \omega) = T_{r}(p_{0}\longrightarrow p)L_{o}(p_{0}, -\omega) + \int_{0}^{t} T_{r}(p'\longrightarrow p)L_s(p', -\omega) dt'.
+\end{equation} \normalsize
+où $p' = p + t'\omega$ sont les points le long du rayon entre $p$ et $p_{0}$\par
+Le premier terme de cette équation,  $T_{r}(p_{0}\longrightarrow p)L_{o}(p_{0}, -\omega)$,  correspond à la radiance réfléchie par la surface en $p_{0}$ dans la direction $-\omega$. C'est dans ce terme que la contribution de la surface est ajoutée (réflexion et émission sont compris dans $L_{o}$). Le second terme est celui bien connu maintenant, causé par les différentes interactions ayant eu lieu lors du passage de la lumière dans le média.

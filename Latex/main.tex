@@ -1,0 +1,119 @@
+\documentclass[12pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{natbib}
+\usepackage[frenchb]{babel}
+
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\usepackage{bm}
+
+\usepackage[dvipsnames]{xcolor}
+\definecolor{DarkGray}{gray}{0.35}
+
+\input{prog.tex}
+
+\usepackage{graphicx}
+\graphicspath{{pictures/}}
+
+\usepackage{forest}
+
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+\usepackage{ifthen}
+\usepackage{ifpdf}
+\ifpdf
+\usepackage[pdftex]{hyperref}
+\else
+\usepackage{hyperref}
+\fi
+
+\title{Propagation de la lumière dans un milieu participant de type fumée}
+\author{Elsa Tamisier}
+\date{Vendredi 6 juillet 2018}
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%
+%%% First page %%%
+%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+\begin{center}
+
+
+{\large \textbf{\textsc{Université de Poitiers}}}\\[0.5cm]
+
+\vspace{6cm}
+
+% Title
+\rule{\linewidth}{0.5mm} \\[0.4cm]
+{ \LARGE \bfseries Propagation de la lumière dans un milieu participant de type fumée \\[0.4cm] }
+\rule{\linewidth}{0.5mm} \\[1.5cm]
+
+% Author and supervisor
+\noindent
+\begin{minipage}[t][0.4cm]{0.9\textwidth}
+  \begin{flushleft} \large
+    \emph{\textbf{Auteur}}\\
+    Elsa \textsc{Tamisier}
+  \end{flushleft}
+\end{minipage}%
+
+\begin{minipage}{0.9\textwidth}
+  \begin{flushright} \large
+        \emph{\textbf{Encadrants}} \\
+        Lilian \textsc{Aveneau}\\
+        Pierre \textsc{Combeau}\\
+    \end{flushright}
+\end{minipage}
+
+\vspace{5cm}
+\includegraphics[width=60mm]{xlim_logo.png}\\
+
+\vfill
+
+% Bottom of the page
+{\textsc{06 Juillet 2018}}
+
+\end{center}
+\end{titlepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Non-significant pages %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand*\contentsname{\textsc{Sommaire}}
+
+\tableofcontents
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Content of the report and references %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\include{Introduction}
+\include{MonteCarlo}
+\include{LTE}
+\include{PhaseFunction}
+\include{Interactions}
+\include{EquationOfTransfer}
+\include{Modifications}
+\include{Algorithme1}
+\include{Algorithme2}
+\include{Algorithme3}
+\include{Algorithme4}
+\include{Algorithme5}
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%% Bibliography %%%
+%%%%%%%%%%%%%%%%%%%%
+
+%\bibliographystyle{plain}
+%\bibliography{bibliographie}
+
+\end{document}

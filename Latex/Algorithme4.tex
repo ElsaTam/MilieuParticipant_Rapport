@@ -1,0 +1,9 @@
+\chapter{Algorithme 4}
+
+\section{Présentation}
+
+Le quatrième algorithme fusionne les algo 2 et 3. Il faut effectuer deux découpes de chaque rayon, l'une pour l'in-scattering et l'autre pour le NEE. Mais la contribution de l'in-scattering en un point $p$ doit être prise en compte sur chaque point où l'on appliquera la NEE, si celui-ci est situé après le point $p$.
+
+\section{Découpes du rayon}
+
+Attention, pour cet algorithme il y aura besoin de deux découpes différentes : une pour appliquer l'in-scattering, l'autre pour l'out-scattering. Ces deux découpes ne créeront pas les mêmes points, mais les contributions de tous les in-scattering le long du rayon sur des points situés avant un point $p_o$ devront être prises en compte lorsqu'on y calculera l'out-scattering.

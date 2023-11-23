@@ -1,0 +1,129 @@
+\chapter{Monte Carlo}
+
+\section{La méthode}
+
+La méthode de Monte Carlo permet de trouver l'approximation d'une intégrale grâce à un échantillonnage aléatoire sur le domaine d'intégration. Soit $I$ une intégrale sur son domaine $\Omega$ :
+\large \begin{equation}
+    I = \int_{\Omega}f(x)dx
+.\end{equation} \normalsize \par
+Prenons un échantillon de N variable aléatoires $x_{i}$ avec leur probabilités d'échantillonnage $p(x_{i})$. Alors nous avons une approximation de l'intégrale avec $\hat I$, l'\textbf{estimateur} de Monte Carlo :
+\large \begin{equation}
+    \hat I = \frac{1}{N}\sum\limits_{i=1}^{N} \frac{f(x_{i})}{p(x_{i})}
+.\end{equation} \normalsize \par
+$p(x_{i})$ est appelée la \textit{pdf} (Probability Density Function) de $x_{i}$. Nous avons les conditions suivantes sur une pdf :
+\large \begin{equation}
+    \forall x \in \Omega
+    \text{,}\quad
+    p(x) \geq 0
+    \quad\text{et}\quad
+    \int_{\Omega}p(x)dx=1
+.\end{equation} \normalsize \newline\par
+
+$\hat I$ n'est qu'une approximation de $I$. Puisque nous travaillions avec un échantillon aléatoire, il est possible d'en tirer un nouveau et d'obtenir une nouvelle approximation. Aussi, il suffit de calculer plusieurs estimations et d'en faire la moyenne pour s'approcher de plus en plus de la valeur de $I$. L'estimateur $\hat I$ de Monte Carlo converge vers $I$ :
+\large \begin{equation}
+    E\left[\hat I\right] = I
+.\end{equation} \normalsize \newline\par
+
+Après des calculs basiques de probabilités, il est facile de trouver l'écart-type de $\hat I$ :
+\large \begin{equation}
+    \sigma\left[\hat I\right] = \frac{1}{\sqrt{N}}\sigma\left[\frac{f(x)}{p(x)}\right]
+.\end{equation} \normalsize \par
+Ceci indique que l'erreur diminue avec l'augmentation de la racine carré de la taille de l'échantillonnage. C'est-à-dire que pour diviser l'erreur par 2, il faut multiplier le nombre d'échantillons par 4. Cette erreur n'est pas dépendante de la dimension du domaine d'intégration, ce qui est un avantage principal de la méthode de Monte Carlo.
+
+
+\section{L'échantillonnage}
+
+En informatique il est courant de générer des variables pseudo-aléatoires selon une loi uniforme sur $[0, 1]$. De nombreux algorithmes plus ou moins robustes permettent de tirer des séquences de nombres qui passeront les tests d'aléatoire.\par
+Cependant, comme nous l'avons vu précédemment, la méthode de Monte Carlo utilise des variable aléatoires distribuées selon une loi de densité $p(x)$, qui est propre au domaine d'intégration. Il nous faut donc pouvoir générer de tels échantillons, en partant de variables aléatoires uniformes.
+
+\subsection{Méthode d'inversion}
+
+La première méthode, la plus efficace si la \textit{pdf} le permet, est la méthode d'inversion. Celle-ci se base sur le calcul de la CDF (Cumulative Distribution Function) puis son inversement.\par
+La \textit{CDF} $P(x)$ associée à la \textit{pdf} $p(x)$ est :
+\large \begin{align}
+    P(x) &= p(y \in \Omega, y \geq x) .\\
+         &= \int_{-\infty}^{x} p(y) dy
+.\end{align} \normalsize \newline\par
+
+A partir de cette \textit{CDF} et d'une variable aléatoire uniforme $\xi_{i}$, nous pouvons générer une variable aléatoire $x_{i}$ selon la \textit{pdf} avec la relation suivante :
+\large \begin{equation}
+    x_{i} = P^{-1}(\xi_{i})
+.\end{equation} \normalsize \par
+Il suffit donc de réaliser $N$ fois ce calcul à partir d'un échantillon uniforme de taille $N$, et nous aurons notre échantillon suivant la densité $p(x)$.
+
+\subsection{Méthode de rejet}
+
+Cependant une \textit{pdf} ne permet pas toujours facilement de trouver la \textit{CDF} associée. Ou bien cette dernière n'est pas toujours inversible (ou cette transformation est lourde à faire d'un point de vue algorithmique). Il existe donc une autre méthode pour produire un échantillonnage adéquat.\par
+Pour cette méthode, il faut qu'en plus de notre densité $p(x)$ difficilement utilisable, nous ayons une densité $q(x)$ pour laquelle nous savons générer un échantillonnage (par exemple avec la méthode d'inversion), telle que :
+\large \begin{equation}
+    \forall x \in \Omega
+    \text{,}\quad
+    p(x) \leq c \times q(x)
+.\end{equation} \normalsize
+avec $c$ une constante positive choisie judicieusement (voir ci-après).\newline\par
+
+Avec cette densité $q(x)$, il faut générer des échantillons $x_{i}$ et, pour chacun, vérifier que
+\large \begin{equation}\label{eq:condition_rejet}
+    \xi \times c \times q(x_{i}) \leq p(x_{i})
+.\end{equation} \normalsize
+où $\xi$ est une variable aléatoire qui suit une loi uniforme $U(0, 1)$.\par
+Si la condition \ref{eq:condition_rejet} est vérifiée, alors $x_{i}$ est un échantillon accepté et sera utilisé. Sinon, une nouvelle paire $(x_{i}, \xi)$ est générée et testée à nouveau.\newline\par
+
+Plus l'écart entre les deux densités $p(x)$ et $cq(x)$ est grand, plus il y a des chances que l'échantillon $x_{i}$ soit rejeté. Aussi, pour optimiser la vitesse de génération de l'échantillonnage, il faut chercher à prendre la constante $c$ la plus petite possible.
+
+
+\subsection{Direction aléatoire en coordonnées sphériques}
+
+Dans le cadre de la propagation de la lumière, nous aurons à échantillonner sur un hémisphère pour lancer le rayon, puis sur des sphères lorsque nous calculerons le comportement de la lumière sur une particule du milieu participant. L'échantillonnage d'une direction est donc plutôt à faire en coordonnées sphériques où elle est représentée par deux données $(\theta, \phi)$ qui représente un point sur la surface de la sphère. $\theta$ est appelé le \textit{zenith} (ou \textit{élévation}) du point. Et $\phi$ est appelé l'\textit{azimuth} du point.\par
+Nous avons les intervalles de définition suivants :
+\large \begin{equation*}
+    \theta \in \left\{
+        \begin{array}{ll}
+            \left[ 0, \pi \right] & \text{sur une sphère} .\\
+            \left[ 0, \frac{\pi}{2} \right] & \text{sur un hémisphère}.
+        \end{array}
+    \right.
+\end{equation*}
+\begin{equation*}
+    \phi \in \left[ 0, 2\pi \right]
+.\end{equation*} \normalsize \newline\par
+
+Mais il ne suffit pas de tirer deux variables aléatoires uniformes sur l'intervalle correspondant pour générer un bon échantillon $(\theta, \phi)$. En effet, imaginons que l'on coupe des tranches de notre sphères, orthogonalement à l'axe de révolution de l'angle $\phi$. Alors, peu importe la valeur de $\theta$ et donc l'aire de notre cercle, $\phi$ sera distribué de la même manière. De manière uniforme, nous aurons donc autant d'échantillons sur un cercle large (lorsque $\theta$ est proche de $\frac{\pi}{2}$) que sur un cercle bien plus petit (lorsque $\theta$ est proche de $0$). il en découlera une mauvaise répartition des directions échantillonnées. Et l'échantillonnage ne sera plus uniforme sur la sphère.\newline\par
+
+Il faut échantillonner la direction $\overrightarrow{\omega}$ selon la \textit{pdf} $p(\overrightarrow{\omega})$. C'est-à-dire qu'il faut échantillonner chacune des deux variables $\theta$ et $\phi$ selon leur \textit{pdf} respectives $p(\theta)$ et $p(\phi)$ associée à $p(\overrightarrow{\omega})$. Plus précisément, il ne faut pas échantillonner les deux variables indépendamment, mais en prenant en compte la valeur trouvée pour $\theta$ lorsque l'on va vouloir générer $\phi$.\par
+Avec des calculs en partant de l'angle solide $d\overrightarrow{\omega}$ et en sachant que $p(\overrightarrow{\omega})$ est constante (puisque nous voulons une distribution uniforme sur la sphère ou l'hémisphère), nous arrivons aux fonctions suivantes.\newline\par
+\textbf{Pour un hémisphère.}
+\large \begin{equation}
+    p(\overrightarrow{\omega}) = \frac{1}{2\pi}
+.\end{equation}
+\begin{align}
+    &p(\theta) = sin(\theta) .\\
+    &p(\phi \mid \theta) = \frac{1}{2\pi}
+.\end{align}
+\begin{align}
+    &P(\theta) = 1 - cos\theta .\\
+    &P(\phi \mid \theta) = \frac{\phi}{2\pi}
+.\end{align}
+\begin{align}
+    &P^{-1}(\xi_{\theta}) = cos^{-1}(1 - \xi_{\theta}) .\\
+    &P^{-1}(\xi_{\phi}) = 2 \pi \xi_{\phi}
+.\end{align} \normalsize
+où $\xi_{\theta}$ et $\xi_{\phi}$ sont des variables aléatoires suivant la loi uniforme.\newline\par
+
+\textbf{Pour une sphère.}
+\large
+\begin{equation}
+    p(\overrightarrow{\omega}) = \frac{1}{4\pi}
+.\end{equation}
+\begin{align}
+    &p(\theta) = \frac{sin(\theta)}{2} \\
+    &p(\phi \mid \theta) = \frac{1}{2\pi}
+.\end{align}
+\begin{align}
+    &P(\theta) = \frac{1 - cos\theta}{2} .\\
+    &P(\phi \mid \theta) = \frac{\phi}{2\pi}
+.\end{align}
+\begin{align}
+    &P^{-1}(\xi_{\theta}) = cos^{-1}(1 - 2\xi_{\theta}) .\\
+    &P^{-1}(\xi_{\phi}) = 2 \pi \xi_{\phi}
+.\end{align} \normalsize
