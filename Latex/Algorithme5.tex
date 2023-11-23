@@ -1,0 +1,10 @@
+\chapter{Algorithme 5}
+
+\section{Présentation}
+
+Celui-ci est différent des autres. Au lieu de tirer un rayon en ligne droite et de simuler les interactions avec la fumée grâce à des coefficients d'absorption ou de dispersion, nous allons en chaque point $p_k$ (point dans le volume) estimer la probabilité de dévier dans une certaine direction. Cette approche est très semblable à l'approche actuelle (sans milieu participant) où sur chaque point surface rencontré nous tirons une nouvelle direction. Ici, régulièrement dans la fumée, nous tirons éventuellement une nouvelle direction sur la sphère complète (et non plus juste l'hémisphère). Ceci est faisable grâce à la fonction de phase, tout comme on le faisait avec la BRDF jusqu'à présent. Bien évidemment, la technique du NEE y est aussi applicable en chaque point $p_k$.
+
+\section{Idée}
+
+Ici, il faudra dévier le rayon à l'intérieur du milieu et plus nécessairement sur des points de surface. Pour cela, il faudra utiliser la fonction de phase, qui joue un rôle semblable à la BRDF mais pour un milieu participant. Bien évidemment, les échantillonnages de nouvelles direction ne se feront plus sur un hémisphère mais sur une sphère complète. De plus, la probabilité de dévier dépend des paramètres du milieu, de ce fait un rayon ne dévie pas régulièrement selon un pas fixé.\par
+Je n'ai pas eu le temps de m'y mettre mais il serait très intéressant de créer une interface pour les fonctions de phase, tout comme il en existe déjà une pour les BRDF.

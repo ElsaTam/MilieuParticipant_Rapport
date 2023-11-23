@@ -1,0 +1,59 @@
+\chapter{Modification du code}
+
+\section{Package participatingmedia}
+
+J'ai ajouté un package \textbf{\textit{org.xlim.sic.ig.simulators.impl.participatingmedia}} dans lequel j'ai ajouté tous les fichiers que j'ai créés. S'y trouve donc l'arborescence suivante :\newline\newline
+\begin{forest}
+  for tree={
+    font=\ttfamily,
+    grow'=0,
+    child anchor=west,
+    parent anchor=south,
+    anchor=west,
+    calign=first,
+    edge path={
+      \noexpand\path [draw, \forestoption{edge}]
+      (!u.south west) +(7.5pt,0) |- node[fill,inner sep=1.25pt] {} (.child anchor)\forestoption{edge label};
+    },
+    before typesetting nodes={
+      if n=1
+        {insert before={[,phantom]}}
+        {}
+    },
+    fit=band,
+    before computing xy={l=15pt},
+  }
+[participatingmedia
+    [mcshooting1
+        [RayShootingPPSimulator1.java]
+        [RayShootingPPSimulatorFactory1.java]
+    ]
+    [mcshooting2
+        [RayShootingPPSimulator2.java]
+        [RayShootingPPSimulatorFactory2.java]
+    ]
+    [mcshooting3
+        [RayShootingPPSimulator3.java]
+        [RayShootingPPSimulatorFactory3.java]
+    ]
+    [ParticipatingMedia.java]
+]
+\end{forest}\newline\par
+Chaque sous-package \textbf{\textit{mcshootingX}} correspond à un algorithme présenté ci-dessous. Durant la durée de mon stage, j'ai eu le temps de travailler sur les 3 premiers seulement.\newline\par
+
+La classe \textbf{ParticipatingMedia} est commune à tous les algorithmes et sert à décrire un milieu participant. C'est ici que se trouvent les différentes méthodes pour calculer la transmittance, l'in-scattering, l'out-scattering, ...
+
+
+
+\section{Modifications d'interfaces}
+
+Il m'aura fallut modifier quelques interfaces déjà existantes du code.\newline\par
+
+\textit{org.xlim.sic.ig.kernel.physics.\textbf{Brdf}} \qquad
+En effet, la classe BRDF permettait de réaliser la réflexion pour un champ (lumineux, radio, ...) mais pas pour une réponse impulsionnelle. Hors, dans mon algorithme 2, mon lancer de rayon transporte une réponse impulsionnelle et non plus seulement un champ lumineux. Il me faut donc ajouter la méthode \textbf{reflect} qui prend en paramètre une réponse impulsionnelle (et qui pour chaque champ va lui appliquer la méthode \textbf{reflect} de base). Pour l'instant, je n'ai modifié que les implémentations utilisant des LightField.\newline\par
+
+\textit{org.xlim.sic.ig.sensors.\textbf{Receiver}} \qquad
+Là encore, un receiver ne pouvait recevoir qu'un champ et pas une réponse impulsionnelle. J'ai donc ajouté la méthode \textbf{receive} qui prend en paramètre une réponse impulsionnelle. Pour l'instant, seul le DiscReceiver a cette méthode implémentée.\newline\par
+
+\textit{org.xlim.sic.ig.simulators.\textbf{ImpulseResponse}} \qquad
+J'ai ajouté ici trois méthodes nécessaires pour l'algo 2 : \textbf{multiplyByAScalar} qui multiplie tous les champs de la réponse par un scalaire, \textbf{incrementDepth} qui décale de +1 en profondeur tous les champs de la réponse, \textbf{addTime} qui déplace dans le temps tous les champs de la réponse.

@@ -1,0 +1,13 @@
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+
+En informatique graphique, et plus précisément dans le domaine du rendu, il est courant de trouver des recherches, expérimentations, démonstrations, ... sur la façon dont la lumière va être rendue. La lumière a toujours intéressé les savants et il existe de nombreux papiers et manuscrits traitant de ce sujet. Physiquement (et très basiquement résumé), la lumière est l'énergie transportée par les \textit{photons}, qui se déplacent selon une onde. Cette onde n'a pas toujours la même longueur $\lambda$ et c'est cette différence qui produit un large spectre de lumière.\par
+Ces photons interagissent avec toutes les particules qu'ils vont croiser. Certaines interactions sont extrêmement faibles, c'est par exemple le cas de l'air qui ne modifie pas (sur une distance pas trop importante) notre perception des couleurs. D'autres à l'inverse vont avoir un impact plus important, telles les interactions dues au passage de la lumière dans de la fumée.\newline\par
+
+Ce rapport résume ce que j'ai pu lire et comprendre autour de la propagation de la lumière dans un milieu participant, afin de proposer un algorithme simple permettant de calculer la radiance d'un rayon récupérée à la sortie d'un milieu participant (plus précisément de la fumée).\newline\par
+
+Dans un premier temps je présente rapidement la méthode de Monte Carlo qui permet d'algorithmiquement approcher une intégrale sur un domaine donné, en utilisant l'aléatoire et les probabilités. Je ne m'attarde ni sur les démonstrations ni sur les optimisations que je ne compte pas appliquer pour le moment.\par
+Puis je présente l'équation du transfert de la lumière (et plus précisément l'équation en potentiel) qui sera la base de notre démarche future.\par
+Ensuite se trouve un court résumé expliquant ce que sont les fonctions de phase puis quelques fonctions de phase usuelles.\par
+Le troisième chapitre se penche sur les différentes interactions qui s'appliquent sur la radiance d'un rayon lorsque celui-ci passe dans un milieu participant.\par
+Dans le dernier chapitre, qui est très court, est introduite l'équation de transfert, qui combine l'ensemble des interactions. C'est avec cette équation de transfert et l'équation du transport de la lumière qu'il me faudra réfléchir à une solution.\par
